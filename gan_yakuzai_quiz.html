@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>日病薬 がん薬物療法認定薬剤師 問題集</title>
+<style>
+  :root {
+    --primary: #1a5276;
+    --primary-light: #2e86c1;
+    --success: #1e8449;
+    --danger: #c0392b;
+    --warning: #d68910;
+    --bg: #f0f4f8;
+    --card: #ffffff;
+    --text: #2c3e50;
+    --muted: #7f8c8d;
+    --border: #dce1e7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  /* Header */
+  header { background: var(--primary); color: white; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+  header h1 { font-size: 1rem; font-weight: bold; }
+  header .subtitle { font-size: 0.75rem; opacity: 0.8; }
+
+  /* Nav tabs */
+  nav { background: var(--primary-light); display: flex; gap: 2px; padding: 0 10px; }
+  nav button { background: transparent; color: rgba(255,255,255,0.8); border: none; padding: 10px 16px; cursor: pointer; font-size: 0.85rem; border-bottom: 3px solid transparent; transition: all 0.2s; }
+  nav button.active { color: white; border-bottom-color: #f9ca24; font-weight: bold; }
+  nav button:hover { background: rgba(255,255,255,0.1); }
+
+  /* Main layout */
+  main { max-width: 860px; margin: 0 auto; padding: 20px 16px; }
+
+  /* Screen visibility */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* Cards */
+  .card { background: var(--card); border-radius: 10px; padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+
+  /* Buttons */
+  .btn { display: inline-block; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: bold; transition: all 0.2s; }
+  .btn-primary { background: var(--primary); color: white; }
+  .btn-primary:hover { background: var(--primary-light); }
+  .btn-success { background: var(--success); color: white; }
+  .btn-danger { background: var(--danger); color: white; }
+  .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+  .btn-outline:hover { background: var(--primary); color: white; }
+  .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Home screen */
+  .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  @media (max-width: 600px) { .home-grid { grid-template-columns: 1fr; } }
+  .mode-card { background: var(--card); border-radius: 10px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); cursor: pointer; border: 2px solid transparent; transition: all 0.2s; text-align: center; }
+  .mode-card:hover { border-color: var(--primary-light); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); }
+  .mode-card .icon { font-size: 2.2rem; margin-bottom: 8px; }
+  .mode-card h3 { color: var(--primary); margin-bottom: 6px; font-size: 1rem; }
+  .mode-card p { color: var(--muted); font-size: 0.8rem; }
+
+  /* Category select */
+  .category-grid { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+  .cat-btn { padding: 6px 14px; border-radius: 20px; border: 2px solid var(--border); background: white; cursor: pointer; font-size: 0.82rem; transition: all 0.2s; }
+  .cat-btn.selected { border-color: var(--primary); background: var(--primary); color: white; }
+  .cat-btn:hover { border-color: var(--primary-light); }
+
+  /* Stats bar */
+  .stats-bar { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+  .stat-box { flex: 1; min-width: 100px; background: var(--card); border-radius: 8px; padding: 12px 16px; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+  .stat-box .num { font-size: 1.6rem; font-weight: bold; color: var(--primary); }
+  .stat-box .label { font-size: 0.75rem; color: var(--muted); }
+
+  /* Quiz screen */
+  .quiz-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .progress-bar { background: var(--border); border-radius: 4px; height: 8px; flex: 1; margin: 0 12px; }
+  .progress-fill { background: var(--primary-light); height: 100%; border-radius: 4px; transition: width 0.4s; }
+  .timer { background: var(--primary); color: white; border-radius: 6px; padding: 4px 12px; font-weight: bold; font-size: 0.9rem; min-width: 70px; text-align: center; }
+  .timer.warning { background: var(--warning); }
+  .timer.danger { background: var(--danger); }
+
+  .category-tag { display: inline-block; background: #e8f4fd; color: var(--primary-light); border-radius: 4px; padding: 2px 10px; font-size: 0.75rem; font-weight: bold; margin-bottom: 10px; }
+  .question-text { font-size: 1.05rem; font-weight: bold; margin-bottom: 18px; line-height: 1.7; }
+
+  .choices { display: flex; flex-direction: column; gap: 10px; }
+  .choice-btn { background: #f8f9fa; border: 2px solid var(--border); border-radius: 8px; padding: 12px 16px; cursor: pointer; text-align: left; font-size: 0.9rem; display: flex; align-items: flex-start; gap: 10px; transition: all 0.15s; }
+  .choice-btn:hover:not(:disabled) { border-color: var(--primary-light); background: #e8f4fd; }
+  .choice-btn.correct { border-color: var(--success); background: #c8f0d4; color: var(--success); font-weight: bold; }
+  .choice-btn.correct .choice-num { color: var(--success); }
+  .choice-btn.wrong { border-color: var(--danger); background: #fdd0d0; color: var(--danger); }
+  .choice-btn.wrong .choice-num { color: var(--danger); }
+  .choice-btn:disabled { cursor: default; }
+  .choice-btn.multi-selected { border-color: var(--primary-light); background: #d6eaf8; font-weight: bold; }
+  .choice-num { font-weight: bold; color: var(--muted); min-width: 20px; }
+  .choice-icon { margin-left: auto; font-size: 1.1rem; }
+  .multi-hint { font-size: 0.82rem; color: var(--primary-light); font-weight: bold; margin-bottom: 10px; background: #e8f4fd; border-radius: 6px; padding: 6px 12px; display: inline-block; }
+
+  /* Explanation */
+  .explanation { background: #fffde7; border-left: 4px solid var(--warning); border-radius: 0 8px 8px 0; padding: 14px 16px; margin-top: 16px; font-size: 0.88rem; line-height: 1.7; display: none; }
+  .explanation.show { display: block; }
+  .explanation h4 { color: var(--warning); margin-bottom: 6px; font-size: 0.9rem; }
+
+  .quiz-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 16px; }
+
+  /* Inline result banner */
+  .result-banner { display: none; margin-top: 20px; background: #e8f4fd; border: 2px solid var(--primary-light); border-radius: 10px; padding: 20px; text-align: center; }
+  .result-banner .result-score { font-size: 1.4rem; font-weight: bold; color: var(--primary); margin-bottom: 6px; }
+  .result-banner .result-msg { font-size: 0.95rem; color: var(--muted); margin-bottom: 14px; }
+
+  /* Result screen */
+  .result-circle { width: 130px; height: 130px; border-radius: 50%; border: 8px solid; margin: 0 auto 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .result-circle .score { font-size: 2.2rem; font-weight: bold; }
+  .result-circle .total { font-size: 0.85rem; color: var(--muted); }
+  .result-pass { border-color: var(--success); color: var(--success); }
+  .result-fail { border-color: var(--danger); color: var(--danger); }
+  .result-mid { border-color: var(--warning); color: var(--warning); }
+
+  .review-item { border-radius: 8px; padding: 14px; margin-bottom: 10px; border-left: 4px solid; }
+  .review-item.correct { background: #e8f5e9; border-color: var(--success); }
+  .review-item.wrong { background: #fde8e8; border-color: var(--danger); }
+  .review-item .q-text { font-size: 0.88rem; font-weight: bold; margin-bottom: 6px; }
+  .review-item .answer-line { font-size: 0.82rem; color: var(--muted); }
+
+  /* History screen */
+  .history-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+  .history-item:last-child { border-bottom: none; }
+  .history-score { font-weight: bold; font-size: 1rem; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; }
+  .badge-pass { background: #e8f5e9; color: var(--success); }
+  .badge-fail { background: #fde8e8; color: var(--danger); }
+  .badge-mid { background: #fffde7; color: var(--warning); }
+
+  /* Category accuracy table */
+  .cat-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .cat-table th { background: var(--primary); color: white; padding: 8px 12px; text-align: left; }
+  .cat-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  .cat-table tr:hover { background: #f8f9fa; }
+  .acc-bar-wrap { background: var(--border); border-radius: 4px; height: 8px; width: 120px; display: inline-block; vertical-align: middle; }
+  .acc-bar { background: var(--primary-light); height: 100%; border-radius: 4px; }
+
+  /* Section titles */
+  .section-title { font-size: 1.05rem; font-weight: bold; color: var(--primary); margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--primary); }
+
+  select, input[type=number] { padding: 8px 12px; border: 2px solid var(--border); border-radius: 6px; font-size: 0.9rem; }
+  select:focus, input:focus { outline: none; border-color: var(--primary-light); }
+
+  .flex-between { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .mt-10 { margin-top: 10px; }
+  .mt-16 { margin-top: 16px; }
+  .text-center { text-align: center; }
+  .text-muted { color: var(--muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="subtitle">日本病院薬剤師会</div>
+    <h1>がん薬物療法認定薬剤師 問題集</h1>
+  </div>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('home')">ホーム</button>
+  <button onclick="showTab('quiz')">練習問題</button>
+  <button onclick="showTab('mock')">模擬試験</button>
+  <button onclick="showTab('history')">成績履歴</button>
+</nav>
+
+<main>
+  <!-- ===== HOME ===== -->
+  <div id="screen-home" class="screen active">
+    <div class="stats-bar" id="home-stats"></div>
+    <div class="home-grid">
+      <div class="mode-card" onclick="startMode('random')">
+        <div class="icon">🎲</div>
+        <h3>ランダム練習</h3>
+        <p>全カテゴリからランダムに出題。手軽に実力チェック。</p>
+      </div>
+      <div class="mode-card" onclick="showTab('quiz')">
+        <div class="icon">📚</div>
+        <h3>カテゴリ別練習</h3>
+        <p>苦手分野を集中的に学習。カテゴリと出題数を選択。</p>
+      </div>
+      <div class="mode-card" onclick="startMode('wrong')">
+        <div class="icon">❌</div>
+        <h3>苦手問題集中</h3>
+        <p>過去に間違えた問題のみを出題して弱点克服。</p>
+      </div>
+      <div class="mode-card" onclick="showTab('mock')">
+        <div class="icon">⏱️</div>
+        <h3>模擬試験</h3>
+        <p>時間制限付きで本番形式の模擬試験に挑戦。</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title">カテゴリ別正答率</div>
+      <table class="cat-table" id="home-cat-table">
+        <thead><tr><th>カテゴリ</th><th>問題数</th><th>正答率</th></tr></thead>
+        <tbody id="home-cat-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== QUIZ ===== -->
+  <div id="screen-quiz" class="screen">
+    <div id="quiz-setup" class="card">
+      <div class="section-title">練習問題設定</div>
+      <div style="margin-bottom:14px;">
+        <div style="font-weight:bold; margin-bottom:8px; font-size:0.9rem;">カテゴリ選択（複数可）</div>
+        <div class="category-grid" id="cat-select-grid"></div>
+      </div>
+      <div class="flex-between" style="margin-bottom:14px;">
+        <div>
+          <label style="font-weight:bold; font-size:0.9rem;">出題数：</label>
+          <input type="number" id="q-count" value="10" min="1" max="100" style="width:80px; margin-left:8px;">
+        </div>
+        <div>
+          <label style="font-weight:bold; font-size:0.9rem;">出題順：</label>
+          <select id="q-order" style="margin-left:8px;">
+            <option value="random">ランダム</option>
+            <option value="order">順番通り</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary" onclick="startQuiz()">開始する</button>
+    </div>
+
+    <div id="quiz-area" style="display:none;">
+      <div class="card">
+        <div class="quiz-header">
+          <span id="q-progress-text" style="font-size:0.85rem; color:var(--muted); white-space:nowrap;"></span>
+          <div class="progress-bar"><div class="progress-fill" id="q-progress-fill"></div></div>
+          <span id="q-score-badge" style="font-size:0.85rem; color:var(--primary); white-space:nowrap;"></span>
+        </div>
+        <div class="category-tag" id="q-cat-tag"></div>
+        <div class="question-text" id="q-text"></div>
+        <div class="choices" id="q-choices"></div>
+        <div class="explanation" id="q-explanation">
+          <h4>解説</h4>
+          <div id="q-explanation-text"></div>
+        </div>
+        <div class="quiz-actions">
+          <button class="btn btn-primary" id="btn-submit-multi" onclick="submitMultiAnswer()" style="display:none;">解答する</button>
+          <button class="btn btn-outline btn-sm" id="btn-explain" onclick="toggleExplanation()" style="display:none;">解説を見る</button>
+          <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()" style="display:none;">次の問題 →</button>
+        </div>
+        <div class="result-banner" id="q-result-banner">
+          <div class="result-score" id="q-result-score"></div>
+          <div class="result-msg" id="q-result-msg"></div>
+          <button class="btn btn-primary" onclick="returnHome()">ホームに戻る</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MOCK ===== -->
+  <div id="screen-mock" class="screen">
+    <div id="mock-setup" class="card">
+      <div class="section-title">模擬試験設定</div>
+      <p class="text-muted" style="margin-bottom:14px;">本番試験に近い形式で時間制限付きの模擬試験を行います。</p>
+      <div class="flex-between" style="margin-bottom:16px;">
+        <div>
+          <label style="font-weight:bold; font-size:0.9rem;">出題数：</label>
+          <select id="mock-count" style="margin-left:8px;">
+            <option value="20">20問（20分）</option>
+            <option value="30" selected>30問（30分）</option>
+            <option value="40">40問（40分）</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-weight:bold; font-size:0.9rem;">時間制限：</label>
+          <select id="mock-time" style="margin-left:8px;">
+            <option value="1">1分/問</option>
+            <option value="2" selected>2分/問</option>
+            <option value="3">3分/問</option>
+          </select>
+        </div>
+      </div>
+      <div style="background:#e8f4fd; border-radius:8px; padding:12px; margin-bottom:16px; font-size:0.85rem;">
+        <strong>注意事項：</strong> 模擬試験中は解説が表示されません。終了後に結果と解説を確認できます。
+      </div>
+      <button class="btn btn-primary" onclick="startMock()">試験を開始する</button>
+    </div>
+
+    <div id="mock-area" style="display:none;">
+      <div class="card">
+        <div class="quiz-header">
+          <span id="mock-progress-text" style="font-size:0.85rem; color:var(--muted); white-space:nowrap;"></span>
+          <div class="progress-bar"><div class="progress-fill" id="mock-progress-fill"></div></div>
+          <div class="timer" id="mock-timer">00:00</div>
+        </div>
+        <div class="category-tag" id="mock-cat-tag"></div>
+        <div class="question-text" id="mock-q-text"></div>
+        <div class="choices" id="mock-choices"></div>
+        <div class="quiz-actions">
+          <button class="btn btn-primary" id="mock-btn-submit-multi" onclick="submitMockMultiAnswer()" style="display:none;">解答する</button>
+          <button class="btn btn-primary" id="mock-btn-next" onclick="mockNext()" style="display:none;">次の問題 →</button>
+        </div>
+        <div class="result-banner" id="mock-result-banner">
+          <div class="result-score" id="mock-result-score"></div>
+          <div class="result-msg" id="mock-result-msg"></div>
+          <button class="btn btn-primary" onclick="returnHome()">ホームに戻る</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HISTORY ===== -->
+  <div id="screen-history" class="screen">
+    <div class="card">
+      <div class="flex-between" style="margin-bottom:14px;">
+        <div class="section-title" style="margin-bottom:0; border:none;">成績履歴</div>
+        <button class="btn btn-danger btn-sm" onclick="clearHistory()">履歴をリセット</button>
+      </div>
+      <div id="history-list"><p class="text-muted text-center">まだ履歴がありません。</p></div>
+    </div>
+    <div class="card">
+      <div class="section-title">全体統計</div>
+      <div class="stats-bar" id="history-stats"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ===================== 問題データ =====================
+const QUESTIONS = [
+  // ---- 殺細胞性抗腫瘍薬 ----
+  {
+    id: 1, cat: "殺細胞性抗腫瘍薬",
+    q: "シスプラチンの主な用量制限毒性（DLT）はどれか。",
+    choices: ["骨髄抑制", "腎毒性", "心毒性", "肺毒性"],
+    ans: 1,
+    exp: "シスプラチンの主なDLTは腎毒性（尿細管障害）です。十分な水和（輸液）とマンニトールによる尿量確保が必須です。骨髄抑制も見られますが、腎毒性が最も重要です。"
+  },
+  {
+    id: 2, cat: "殺細胞性抗腫瘍薬",
+    q: "メトトレキサート大量療法後の解毒（レスキュー）に用いる薬剤はどれか。",
+    choices: ["メスナ", "アミホスチン", "ロイコボリン（葉酸カルシウム）", "デクスラゾキサン"],
+    ans: 2,
+    exp: "メトトレキサートはジヒドロ葉酸還元酵素（DHFR）を阻害し、葉酸代謝を障害します。ロイコボリン（フォリン酸）は還元型葉酸であり、DHFRを介さずに葉酸として利用されるためレスキューに使用されます。"
+  },
+  {
+    id: 3, cat: "殺細胞性抗腫瘍薬",
+    q: "フルオロウラシル（5-FU）の主な作用機序はどれか。",
+    choices: ["DNAトポイソメラーゼⅠ阻害", "チミジル酸合成酵素（TS）阻害", "微小管重合阻害", "DNAアルキル化"],
+    ans: 1,
+    exp: "5-FUは体内でFdUMPに変換され、チミジル酸合成酵素（TS）を阻害してdTTPの合成を阻害します。またFURTPとしてRNAに取り込まれます。TS阻害がメインの作用機序です。"
+  },
+  {
+    id: 4, cat: "殺細胞性抗腫瘍薬",
+    q: "オキサリプラチンに特徴的な副作用はどれか。",
+    choices: ["出血性膀胱炎", "末梢神経障害（冷感誘発性）", "脱毛", "口内炎"],
+    ans: 1,
+    exp: "オキサリプラチンに特徴的な副作用は末梢神経障害で、特に急性期に冷感で誘発・増悪される感覚異常が特徴的です。冷たいものに触れたり飲んだりすると症状が悪化するため、冷たいものを避けるよう指導します。"
+  },
+  {
+    id: 5, cat: "殺細胞性抗腫瘍薬",
+    q: "イホスファミドによる出血性膀胱炎の予防に用いる薬剤はどれか。",
+    choices: ["アロプリノール", "メスナ", "デクスラゾキサン", "アミホスチン"],
+    ans: 1,
+    exp: "イホスファミドはアクロレインという尿路毒性代謝物を産生します。メスナはアクロレインと結合し無毒化するため、出血性膀胱炎の予防に使用されます。"
+  },
+  {
+    id: 6, cat: "殺細胞性抗腫瘍薬",
+    q: "アントラサイクリン系薬剤の心毒性予防に用いる薬剤はどれか。",
+    choices: ["メスナ", "ロイコボリン", "デクスラゾキサン", "パリフェルミン"],
+    ans: 2,
+    exp: "デクスラゾキサンはトポイソメラーゼⅡβを阻害し、アントラサイクリン系薬剤（ドキソルビシンなど）による心毒性を軽減します。鉄キレート作用も持ちます。"
+  },
+  {
+    id: 7, cat: "殺細胞性抗腫瘍薬",
+    q: "パクリタキセルの作用機序はどれか。",
+    choices: ["微小管解重合促進", "微小管重合促進・安定化", "トポイソメラーゼⅡ阻害", "DNAアルキル化"],
+    ans: 1,
+    exp: "パクリタキセルはタキサン系薬剤で、微小管の重合を促進・安定化させることで脱重合を阻害します。細胞分裂（有糸分裂）に必要な微小管の動的不安定性を失わせ、細胞周期をG2/M期で停止させます。"
+  },
+  {
+    id: 8, cat: "殺細胞性抗腫瘍薬",
+    q: "ゲムシタビンの主な用量制限毒性はどれか。",
+    choices: ["腎毒性", "骨髄抑制（特に血小板減少）", "末梢神経障害", "心毒性"],
+    ans: 1,
+    exp: "ゲムシタビン（ヌクレオシドアナログ）の主なDLTは骨髄抑制、特に血小板減少です。また間質性肺炎も重要な副作用です。"
+  },
+  {
+    id: 9, cat: "殺細胞性抗腫瘍薬",
+    q: "ビンクリスチンで最も問題となる副作用はどれか。",
+    choices: ["骨髄抑制", "脱毛", "末梢神経障害", "腎毒性"],
+    ans: 2,
+    exp: "ビンクリスチン（ビンカアルカロイド系）は微小管の重合を阻害します。他のビンカアルカロイドと異なり骨髄抑制は軽度で、末梢神経障害（感覚・運動・自律神経）が主要な副作用です。"
+  },
+  {
+    id: 10, cat: "殺細胞性抗腫瘍薬",
+    q: "カペシタビン（ゼローダ）の手足症候群に対する予防・対策として適切なのはどれか。",
+    choices: ["運動を積極的に行う", "熱いお湯での入浴を推奨", "尿素含有クリームや保湿剤の使用", "強度のある靴を使用する"],
+    ans: 2,
+    exp: "カペシタビンによる手足症候群（PPE）の予防には、保湿剤（尿素クリーム、ヘパリン類似物質など）の使用、摩擦・圧力・熱刺激の回避が重要です。熱い湯は避け、柔らかい靴を選びます。"
+  },
+
+  // ---- 分子標的薬 ----
+  {
+    id: 11, cat: "分子標的薬",
+    q: "トラスツズマブ（ハーセプチン）の適応となる乳がんのバイオマーカーはどれか。",
+    choices: ["ER/PgR陽性", "HER2過剰発現・遺伝子増幅", "BRCA1/2変異", "PD-L1高発現"],
+    ans: 1,
+    exp: "トラスツズマブはHER2（ErbB2）を標的とする抗HER2モノクローナル抗体です。HER2過剰発現（IHC 3+）またはFISHによるHER2遺伝子増幅が確認された乳がん・胃がんに適応があります。"
+  },
+  {
+    id: 12, cat: "分子標的薬",
+    q: "イマチニブ（グリベック）が最初に承認された疾患はどれか。",
+    choices: ["急性骨髄性白血病（AML）", "慢性骨髄性白血病（CML）", "多発性骨髄腫", "びまん性大細胞型B細胞リンパ腫"],
+    ans: 1,
+    exp: "イマチニブはBCR-ABLチロシンキナーゼを選択的に阻害し、CMLの治療に革命をもたらしました。BCR-ABL融合遺伝子はt(9;22)転座（フィラデルフィア染色体）によって生じます。"
+  },
+  {
+    id: 13, cat: "分子標的薬",
+    q: "ベバシズマブ（アバスチン）の作用機序はどれか。",
+    choices: ["EGFR阻害", "VEGF-Aへの結合による血管新生阻害", "mTOR阻害", "CDK4/6阻害"],
+    ans: 1,
+    exp: "ベバシズマブは抗VEGF-A抗体であり、腫瘍の血管新生に必須なVEGF-Aに結合して腫瘍への血液供給を遮断します。高血圧、創傷治癒遅延、消化管穿孔、血栓塞栓症などの副作用に注意が必要です。"
+  },
+  {
+    id: 14, cat: "分子標的薬",
+    q: "EGFR遺伝子変異陽性非小細胞肺がん（NSCLC）に使用するTKIはどれか。",
+    choices: ["クリゾチニブ", "ゲフィチニブ（イレッサ）", "ベムラフェニブ", "イブルチニブ"],
+    ans: 1,
+    exp: "ゲフィチニブ、エルロチニブ、アファチニブ、オシメルチニブなどのEGFR-TKIがEGFR遺伝子変異陽性NSCLCに使用されます。クリゾチニブはALK/ROS1融合、ベムラフェニブはBRAF V600E変異の治療薬です。"
+  },
+  {
+    id: 15, cat: "分子標的薬",
+    q: "リツキシマブ（リツキサン）の標的抗原はどれか。",
+    choices: ["CD20", "CD33", "CD52", "HER2"],
+    ans: 0,
+    exp: "リツキシマブはB細胞表面抗原CD20を標的とする抗体薬です。びまん性大細胞型B細胞リンパ腫（DLBCL）や濾胞性リンパ腫など、CD20陽性B細胞性悪性リンパ腫に使用されます。"
+  },
+  {
+    id: 16, cat: "分子標的薬",
+    q: "オシメルチニブ（タグリッソ）が有効なEGFR変異はどれか。",
+    choices: ["エクソン19欠失変異のみ", "L858R点変異のみ", "T790M耐性変異を含むEGFR変異", "KRAS変異"],
+    ans: 2,
+    exp: "オシメルチニブは第3世代EGFR-TKIで、T790M耐性変異を持つ症例（第1・2世代TKI耐性後）や、エクソン19欠失・L858R変異陽性の一次治療にも承認されています。"
+  },
+  {
+    id: 17, cat: "分子標的薬",
+    q: "分子標的薬による間質性肺炎が特に問題となる薬剤はどれか。",
+    choices: ["ベバシズマブ", "ゲフィチニブ", "イマチニブ", "リツキシマブ"],
+    ans: 1,
+    exp: "ゲフィチニブ（イレッサ）は間質性肺炎が重篤な副作用として知られており、日本での市販後に多くの症例が報告されました。咳嗽・息切れ・発熱などの症状に注意し、早期発見・中止が重要です。"
+  },
+
+  // ---- 免疫チェックポイント阻害薬 ----
+  {
+    id: 18, cat: "免疫チェックポイント阻害薬",
+    q: "ニボルマブ（オプジーボ）の標的分子はどれか。",
+    choices: ["CTLA-4", "PD-1", "PD-L1", "LAG-3"],
+    ans: 1,
+    exp: "ニボルマブは抗PD-1抗体です。PD-1（Programmed Death-1）はT細胞表面に発現し、PD-L1/L2と結合するとT細胞が不活化されます。ニボルマブはこの結合を阻害し、免疫応答を回復させます。"
+  },
+  {
+    id: 19, cat: "免疫チェックポイント阻害薬",
+    q: "イピリムマブ（ヤーボイ）の標的分子はどれか。",
+    choices: ["PD-1", "PD-L1", "CTLA-4", "TIM-3"],
+    ans: 2,
+    exp: "イピリムマブは抗CTLA-4抗体です。CTLA-4（Cytotoxic T-Lymphocyte Antigen-4）はT細胞活性化の初期段階を制御する免疫チェックポイント分子で、イピリムマブがこれを阻害することでT細胞が活性化されます。"
+  },
+  {
+    id: 20, cat: "免疫チェックポイント阻害薬",
+    q: "免疫チェックポイント阻害薬に特有の有害事象（irAE）として正しいのはどれか。",
+    choices: ["出血性膀胱炎", "免疫関連有害事象（免疫性肺臓炎・大腸炎・甲状腺機能異常など）", "末梢神経障害", "腎毒性"],
+    ans: 1,
+    exp: "irAE（immune-related Adverse Events）は過剰な免疫応答による自己免疫様の副作用です。代表例は免疫性肺臓炎、免疫性大腸炎、甲状腺機能異常、皮膚炎、肝障害、下垂体炎など。重症例にはステロイド全身投与が必要です。"
+  },
+  {
+    id: 21, cat: "免疫チェックポイント阻害薬",
+    q: "免疫チェックポイント阻害薬による免疫性肺臓炎の治療として最初に行うべきことはどれか。",
+    choices: ["用量を半量に減らして継続", "抗ウイルス薬を投与", "薬剤を中止しステロイド全身投与", "抗生物質を投与"],
+    ans: 2,
+    exp: "Grade 2以上の免疫性肺臓炎が疑われる場合は、まず薬剤を中止（休薬/永久中止）し、プレドニゾロン1〜2mg/kg/日相当のステロイド全身投与を行います。改善が見られない場合はより高用量や免疫抑制剤追加を検討します。"
+  },
+  {
+    id: 22, cat: "免疫チェックポイント阻害薬",
+    q: "PD-L1の発現測定が投与判断に重要な薬剤はどれか。",
+    choices: ["ニボルマブ", "ペムブロリズマブ（キイトルーダ）", "イピリムマブ", "セミプリマブ"],
+    ans: 1,
+    exp: "ペムブロリズマブは抗PD-1抗体ですが、非小細胞肺がんなど一部の適応でPD-L1発現（TPS≧50%など）がコンパニオン診断として要求されます。TPS（Tumor Proportion Score）が高いほど奏効率が高い傾向があります。"
+  },
+
+  // ---- 支持療法 ----
+  {
+    id: 23, cat: "支持療法",
+    q: "高度催吐性化学療法（HEC）の制吐療法として標準的に推奨される3剤併用はどれか。",
+    choices: [
+      "5-HT3受容体拮抗薬＋NK1受容体拮抗薬＋デキサメタゾン",
+      "5-HT3受容体拮抗薬＋メトクロプラミド＋デキサメタゾン",
+      "NK1受容体拮抗薬＋メトクロプラミド＋ロラゼパム",
+      "5-HT3受容体拮抗薬＋H2ブロッカー＋デキサメタゾン"
+    ],
+    ans: 0,
+    exp: "HECの制吐予防では、5-HT3受容体拮抗薬（グラニセトロン等）＋NK1受容体拮抗薬（アプレピタント等）＋デキサメタゾンの3剤が標準です。オランザピンを加えた4剤併用も推奨されています。"
+  },
+  {
+    id: 24, cat: "支持療法",
+    q: "アプレピタント（イメンド）の作用機序はどれか。",
+    choices: ["5-HT3受容体拮抗", "ドパミンD2受容体拮抗", "NK1（ニューロキニン1）受容体拮抗", "H1受容体拮抗"],
+    ans: 2,
+    exp: "アプレピタントはNK1受容体拮抗薬です。遅発性悪心・嘔吐の主なメディエーターであるサブスタンスPがNK1受容体に結合するのを阻害します。CYP3A4の中程度阻害薬であるため薬物相互作用に注意が必要です。"
+  },
+  {
+    id: 25, cat: "支持療法",
+    q: "G-CSF（顆粒球コロニー刺激因子）の一次予防として推奨される発熱性好中球減少症リスクはどれか。",
+    choices: ["リスク＜10%", "リスク10〜20%", "リスク＞20%", "全てのレジメンで推奨"],
+    ans: 2,
+    exp: "G-CSFの一次予防は、発熱性好中球減少症（FN）のリスクが＞20%のレジメンで推奨されます。ASCO/NCCN等のガイドラインに基づきます。10〜20%では患者個別のリスク因子を考慮して判断します。"
+  },
+  {
+    id: 26, cat: "支持療法",
+    q: "フィルグラスチム（G-CSF）投与の禁忌または慎重投与となる状況はどれか。",
+    choices: ["発熱性好中球減少症の治療", "化学療法の前日から当日の投与", "骨髄移植後の好中球回復促進", "末梢血幹細胞採取のための動員"],
+    ans: 1,
+    exp: "G-CSFは化学療法の前日・当日・翌日（化学療法投与期間中）の投与は禁忌または避けるべきとされています。増殖刺激を受けた造血細胞が化学療法によってダメージを受け、骨髄抑制が増悪する可能性があります。"
+  },
+  {
+    id: 27, cat: "支持療法",
+    q: "がん疼痛治療においてWHO3段階除痛ラダーの第3段階で使用される薬剤はどれか。",
+    choices: ["アセトアミノフェン", "コデイン", "モルヒネ（強オピオイド）", "NSAIDs"],
+    ans: 2,
+    exp: "WHO除痛ラダー：第1段階=NSAIDs・アセトアミノフェン、第2段階=弱オピオイド（コデイン・トラマドール）、第3段階=強オピオイド（モルヒネ・オキシコドン・フェンタニルなど）です。"
+  },
+  {
+    id: 28, cat: "支持療法",
+    q: "骨転移による高カルシウム血症の治療に用いる薬剤はどれか。",
+    choices: ["カルシトリオール", "ビスホスホネート製剤（ゾレドロン酸など）", "カルシウム製剤", "ビタミンD製剤"],
+    ans: 1,
+    exp: "がん関連高カルシウム血症には十分な補液に加え、破骨細胞活性を抑制するビスホスホネート（ゾレドロン酸）またはデノスマブが使用されます。また骨転移の予防的治療にも使用されます。"
+  },
+
+  // ---- 副作用管理 ----
+  {
+    id: 29, cat: "副作用管理",
+    q: "CTCAEにおいてGrade 3の好中球減少はどれか。",
+    choices: [
+      "好中球数＜2000/mm³",
+      "好中球数＜1000/mm³",
+      "好中球数＜500/mm³",
+      "好中球数＜100/mm³"
+    ],
+    ans: 1,
+    exp: "CTCAEv5.0での好中球減少：Grade1=＜LLN〜1500、Grade2=＜1500〜1000、Grade3=＜1000〜500、Grade4=＜500 (/mm³)。Grade3以上で臨床的に重要な好中球減少と判断されます。"
+  },
+  {
+    id: 30, cat: "副作用管理",
+    q: "発熱性好中球減少症（FN）の定義として正しいのはどれか。",
+    choices: [
+      "好中球数＜1000/mm³かつ体温＞37.5℃",
+      "好中球数＜500/mm³（または＜1000で48時間以内に500未満が見込まれる）かつ体温＞38.0℃（または38.3℃以上）",
+      "好中球数＜1500/mm³かつ体温＞38.5℃",
+      "白血球数＜2000/mm³かつ体温＞38.0℃"
+    ],
+    ans: 1,
+    exp: "FNは好中球数＜500/mm³（または＜1000で48時間以内に500未満が予測される）かつ腋窩温38.0℃を超える1回の発熱、または38.3℃以上の発熱と定義されます（IDSA/ASCO）。緊急の抗菌薬治療が必要です。"
+  },
+  {
+    id: 31, cat: "副作用管理",
+    q: "タキサン系薬剤（パクリタキセル）の過敏反応を予防するプレメディケーションとして適切なのはどれか。",
+    choices: [
+      "抗ヒスタミン薬＋H2ブロッカー＋コルチコステロイド",
+      "抗ヒスタミン薬のみ",
+      "コルチコステロイドのみ",
+      "制吐薬＋コルチコステロイド"
+    ],
+    ans: 0,
+    exp: "パクリタキセルは溶媒（ポリオキシエチレンヒマシ油）による過敏反応が高率に起こります。抗ヒスタミン薬（ジフェンヒドラミン）＋H2ブロッカー（シメチジン/ファモチジン）＋コルチコステロイド（デキサメタゾン）の3剤前投薬が標準です。"
+  },
+  {
+    id: 32, cat: "副作用管理",
+    q: "腫瘍崩壊症候群（TLS）の予防で最初に行うべき対策はどれか。",
+    choices: ["透析", "大量輸液（水分負荷）＋アロプリノールまたはラスブリカーゼ", "利尿薬投与", "カルシウム補充"],
+    ans: 1,
+    exp: "TLSはリスクの高い症例（高腫瘍量・急速増殖腫瘍）に予防的介入が重要です。十分な水分負荷（尿量確保）と高尿酸血症予防（アロプリノールまたはラスブリカーゼ）が基本です。電解質モニタリングも必須です。"
+  },
+  {
+    id: 33, cat: "副作用管理",
+    q: "フルオロウラシル（5-FU）持続静注やカペシタビン投与中に重篤な毒性が出た場合、原因として考慮すべき酵素欠損はどれか。",
+    choices: ["チミジル酸合成酵素（TS）高発現", "ジヒドロピリミジンデヒドロゲナーゼ（DPD）欠損", "UDP-グルクロン酸転移酵素（UGT1A1）欠損", "チトクロームP450 3A4（CYP3A4）欠損"],
+    ans: 1,
+    exp: "5-FUの主要代謝酵素はDPDです。DPD欠損症の患者では5-FUが異常蓄積し、骨髄抑制・粘膜炎・神経毒性などの重篤な毒性が生じます。UGT1A1欠損はイリノテカンの毒性と関係します。"
+  },
+
+  // ---- レジメン・投与管理 ----
+  {
+    id: 34, cat: "レジメン・投与管理",
+    q: "FOLFOX療法の構成薬剤として正しいのはどれか。",
+    choices: [
+      "フルオロウラシル＋ロイコボリン＋オキサリプラチン",
+      "フルオロウラシル＋ロイコボリン＋イリノテカン",
+      "カペシタビン＋オキサリプラチン",
+      "ゲムシタビン＋オキサリプラチン"
+    ],
+    ans: 0,
+    exp: "FOLFOX：Folinic acid（ロイコボリン）＋Fluorouracil（5-FU）＋Oxaliplatin（オキサリプラチン）。大腸がんの標準治療レジメンです。FOLFIRI：ロイコボリン＋5-FU＋イリノテカン。"
+  },
+  {
+    id: 35, cat: "レジメン・投与管理",
+    q: "イリノテカン（CPT-11）の遅発性下痢の対策として適切なのはどれか。",
+    choices: [
+      "投与前にロペラミドを予防投与",
+      "下痢発症時にロペラミドを高用量投与",
+      "投与前に下剤を投与",
+      "水分摂取を制限する"
+    ],
+    ans: 1,
+    exp: "イリノテカンの遅発性下痢（投与24時間以降）はSN-38によるものです。下痢発症後はロペラミドを通常量より高用量（初回4mg、以降2mg/2h）で投与します。G2以上の下痢では次回治療を減量検討します。"
+  },
+  {
+    id: 36, cat: "レジメン・投与管理",
+    q: "UGT1A1*28多型（ホモ接合体）を持つ患者でイリノテカン使用時に注意すべき副作用はどれか。",
+    choices: ["腎毒性の増強", "心毒性の増強", "好中球減少・下痢の増強", "神経毒性の増強"],
+    ans: 2,
+    exp: "イリノテカンの活性代謝物SN-38はUGT1A1によって不活化されます。UGT1A1*28や*6多型（酵素活性低下）を持つ患者ではSN-38が蓄積し、重篤な好中球減少や下痢リスクが増加します。コンパニオン診断として検査が可能です。"
+  },
+  {
+    id: 37, cat: "レジメン・投与管理",
+    q: "シスプラチンを含むレジメン投与前の必須確認事項として最も重要なのはどれか。",
+    choices: ["血糖値", "血清クレアチニン・CCr（腎機能）", "心電図", "甲状腺機能"],
+    ans: 1,
+    exp: "シスプラチンは腎毒性が最大の問題です。投与前に腎機能（CCrやeGFR）を確認し、基準以下では減量または別薬剤への変更を検討します。投与中は大量補液を行い、尿量を確保します（100mL/h以上）。"
+  },
+  {
+    id: 38, cat: "レジメン・投与管理",
+    q: "血管外漏出が生じた場合に特に組織壊死を引き起こしやすい（起壊死性）薬剤はどれか。",
+    choices: ["シスプラチン（低濃度）", "フルオロウラシル", "ドキソルビシン", "ゲムシタビン"],
+    ans: 2,
+    exp: "抗がん剤は血管外漏出リスクにより起壊死性・炎症性・非壊死性に分類されます。アントラサイクリン系（ドキソルビシン、エピルビシン等）は起壊死性で、漏出した場合は重篤な組織壊死を来します。デクスラゾキサンが解毒薬として使用可能です。"
+  },
+
+  // ---- 薬物相互作用 ----
+  {
+    id: 39, cat: "薬物相互作用",
+    q: "CYP3A4を強く阻害し、分子標的薬の血中濃度を上昇させる可能性があるのはどれか。",
+    choices: ["リファンピシン", "カルバマゼピン", "アゾール系抗真菌薬（イトラコナゾール等）", "フェニトイン"],
+    ans: 2,
+    exp: "アゾール系抗真菌薬（イトラコナゾール、ボリコナゾールなど）はCYP3A4の強力な阻害薬です。多くの分子標的薬（イマチニブ、ソラフェニブ、イブルチニブなど）はCYP3A4で代謝されるため、併用で血中濃度が上昇し毒性増強リスクがあります。"
+  },
+  {
+    id: 40, cat: "薬物相互作用",
+    q: "ワルファリンと抗がん剤の相互作用として正しいのはどれか。",
+    choices: [
+      "フルオロウラシルはワルファリンの効果を減弱する",
+      "多くの抗がん剤・分子標的薬はワルファリンの効果を増強または変動させうる",
+      "相互作用はほとんどないため併用は安全",
+      "ワルファリンを抗がん剤と同時投与することが推奨される"
+    ],
+    ans: 1,
+    exp: "がん患者はワルファリン使用中でも抗凝固が必要な場合があります。多くの抗がん剤・分子標的薬はCYP2C9阻害やタンパク結合置換などでワルファリンのINRを変動させます。モニタリングを強化し、必要に応じてDOACへの変更を検討します。"
+  },
+
+  // ---- 殺細胞性抗腫瘍薬（応用） ----
+  {
+    id: 41, cat: "殺細胞性抗腫瘍薬",
+    q: "エトポシド（VP-16）の作用機序として正しいのはどれか。",
+    choices: ["DNAトポイソメラーゼⅡの安定化によるDNA二本鎖切断", "微小管重合の安定化", "チミジル酸合成酵素の阻害", "DNAアルキル化による二本鎖架橋形成"],
+    ans: 0,
+    exp: "エトポシドはDNAトポイソメラーゼⅡを阻害し、トポイソメラーゼⅡとDNAの複合体（切断型複合体）を安定化させることでDNA二本鎖切断を誘導します。小細胞肺がん・精巣腫瘍・リンパ腫など幅広い疾患に使用されます。"
+  },
+  {
+    id: 42, cat: "殺細胞性抗腫瘍薬",
+    q: "シタラビン（Ara-C）大量療法で問題となる特徴的な副作用はどれか。",
+    choices: ["出血性膀胱炎", "小脳毒性（運動失調・眼振）", "心毒性（QT延長）", "間質性肺炎"],
+    ans: 1,
+    exp: "シタラビン大量療法（HiDAC）では通常量では見られない小脳毒性（運動失調・構音障害・眼振）が出現します。高齢者・腎機能低下例でリスクが高く、投与前に神経学的評価が必要です。不可逆的になりうるため早期発見・中止が重要です。"
+  },
+  {
+    id: 43, cat: "殺細胞性抗腫瘍薬",
+    q: "L-アスパラギナーゼの重篤な副作用として優先的に監視すべきはどれか。",
+    choices: ["末梢神経障害", "膵炎・凝固異常（血栓症・出血）", "腎毒性", "心毒性"],
+    ans: 1,
+    exp: "L-アスパラギナーゼはアスパラギンを枯渇させ白血病細胞増殖を抑制しますが、膵臓のアスパラギン依存性タンパク合成も障害し急性膵炎を引き起こします。また凝固因子（フィブリノゲン、AT-Ⅲ）産生低下による血栓症・出血も重篤です。"
+  },
+  {
+    id: 44, cat: "殺細胞性抗腫瘍薬",
+    q: "ブスルファンの前処置での使用において最も注意すべき臓器毒性はどれか。",
+    choices: ["肝静脈閉塞症（VOD/SOS）", "腎毒性", "末梢神経障害", "聴覚毒性"],
+    ans: 0,
+    exp: "ブスルファンを含む大量化学療法前処置後に肝静脈閉塞症（VOD：Hepatic Veno-Occlusive Disease、現在はSOS：Sinusoidal Obstruction Syndromeとも）が重篤な合併症として起こります。ウルソデオキシコール酸などによる予防と、肝機能・体重のモニタリングが重要です。"
+  },
+
+  // ---- 分子標的薬（応用） ----
+  {
+    id: 45, cat: "分子標的薬",
+    q: "CDK4/6阻害薬（パルボシクリブ等）と併用する内分泌療法として標準的なのはどれか。",
+    choices: ["タモキシフェン単独", "レトロゾール（アロマターゼ阻害薬）またはフルベストラント", "ゴセレリン単独", "メドロキシプロゲステロン"],
+    ans: 1,
+    exp: "CDK4/6阻害薬（パルボシクリブ・リボシクリブ・アベマシクリブ）はHR陽性/HER2陰性の進行乳がんにアロマターゼ阻害薬（レトロゾール・アナストロゾール）またはフルベストラントとの併用で承認されています。好中球減少が主なDLTで定期的な血球検査が必須です。"
+  },
+  {
+    id: 46, cat: "分子標的薬",
+    q: "BRAF V600E変異陽性悪性黒色腫に対する治療の組み合わせとして最も適切なのはどれか。",
+    choices: ["ベムラフェニブ単独", "ダブラフェニブ＋トラメチニブ（BRAF阻害薬＋MEK阻害薬）", "イマチニブ＋スニチニブ", "エルロチニブ＋ベバシズマブ"],
+    ans: 1,
+    exp: "BRAF V600E変異陽性メラノーマではBRAF阻害薬単独療法でMAPKシグナルを阻害しても耐性が生じやすいため、MEK阻害薬との併用（例：ダブラフェニブ＋トラメチニブ）が標準です。扁平上皮がん（皮膚毒性）が単剤より減少する効果もあります。"
+  },
+  {
+    id: 47, cat: "分子標的薬",
+    q: "イブルチニブ（BTK阻害薬）で特に注意が必要な副作用はどれか。",
+    choices: ["間質性肺炎", "心房細動・出血リスク増加", "末梢神経障害", "腎毒性"],
+    ans: 1,
+    exp: "イブルチニブはBTK（ブルトン型チロシンキナーゼ）を阻害し、CLL・マントル細胞リンパ腫等に使用されます。心房細動（頻度3〜16%）と出血リスク（血小板凝集抑制）が特徴的です。抗凝固薬との併用は出血リスクを著明に高めます。"
+  },
+  {
+    id: 48, cat: "分子標的薬",
+    q: "エベロリムス（アフィニトール）の作用機序はどれか。",
+    choices: ["VEGFR阻害", "mTORC1阻害", "EGFR阻害", "ALK阻害"],
+    ans: 1,
+    exp: "エベロリムスはmTOR（哺乳類ラパマイシン標的タンパク）複合体1（mTORC1）を阻害し、細胞増殖・血管新生・代謝を抑制します。腎細胞がん・乳がん（HR陽性/HER2陰性）・消化管神経内分泌腫瘍等に使用されます。口内炎（非感染性）が特徴的な副作用です。"
+  },
+
+  // ---- 免疫チェックポイント阻害薬（応用） ----
+  {
+    id: 49, cat: "免疫チェックポイント阻害薬",
+    q: "irAE（免疫関連有害事象）の管理においてステロイド治療に抵抗性の場合に用いる免疫抑制療法はどれか。",
+    choices: ["さらに高用量ステロイドのみ継続", "インフリキシマブ（抗TNF抗体）やミコフェノール酸モフェチル等の追加", "免疫チェックポイント阻害薬を減量して継続", "NSAIDsのみに変更"],
+    ans: 1,
+    exp: "ステロイド抵抗性irAEでは臓器別に追加免疫抑制薬を使用します。免疫性大腸炎にはインフリキシマブ（抗TNF抗体）やベドリズマブ、肺臓炎にはミコフェノール酸モフェチルやシクロホスファミド、肝炎にはミコフェノール酸モフェチルが使われます。"
+  },
+  {
+    id: 50, cat: "免疫チェックポイント阻害薬",
+    q: "抗PD-1抗体と抗CTLA-4抗体の併用療法（ニボルマブ＋イピリムマブ）で増加するリスクはどれか。",
+    choices: ["単剤と比べてirAEの頻度と重症度が低下する", "単剤と比べてirAEの頻度と重症度が増加する", "効果は同等でirAEは変わらない", "奏効率は低下するがirAEは軽減する"],
+    ans: 1,
+    exp: "PD-1とCTLA-4の二重免疫チェックポイント阻害は相乗的な抗腫瘍効果をもたらす一方、Grade3/4のirAEも単剤と比べて有意に増加します（約50〜60% vs 約20〜30%）。投与前の綿密なインフォームドコンセントと厳重なモニタリングが必要です。"
+  },
+
+  // ---- 支持療法（応用） ----
+  {
+    id: 51, cat: "支持療法",
+    q: "オピオイド誘発性便秘症（OIC）に対し、全身性オピオイド副作用を増やさずに腸管内で選択的に作用する治療薬はどれか。",
+    choices: ["センナ（刺激性下剤）", "ナルデメジン（末梢性μオピオイド受容体拮抗薬）", "マグネシウム製剤", "ポリエチレングリコール製剤"],
+    ans: 1,
+    exp: "ナルデメジン（スインプロイク）は末梢性μオピオイド受容体拮抗薬（PAMORA）で、消化管のオピオイド受容体を選択的に拮抗し便秘を改善します。血液脳関門を通過しにくいため中枢性の鎮痛効果・副作用には影響しません。OIC治療薬として日本でも承認されています。"
+  },
+  {
+    id: 52, cat: "支持療法",
+    q: "がん患者における骨関連事象（SRE）予防目的で使用するデノスマブの作用機序はどれか。",
+    choices: ["破骨細胞のRANKLを直接阻害する抗体", "ビスホスホネートによるファルネシルピロリン酸合成酵素阻害", "VEGF阻害による骨転移の血管新生抑制", "PTHrPを阻害するモノクローナル抗体"],
+    ans: 0,
+    exp: "デノスマブはRANKL（receptor activator of NF-κB ligand）に対する完全ヒト型モノクローナル抗体で、破骨細胞の分化・活性化に必須のRANKL-RANK結合を阻害します。ゾレドロン酸との直接比較でSRE抑制効果が優れるとされます。低カルシウム血症と顎骨壊死に注意が必要です。"
+  },
+  {
+    id: 53, cat: "支持療法",
+    q: "化学療法誘発性末梢神経障害（CIPN）に対してエビデンスのある治療薬はどれか。",
+    choices: ["ビタミンB12（メコバラミン）", "デュロキセチン（SNRIに分類）", "ガバペンチン", "リマプロスト"],
+    ans: 1,
+    exp: "CIPNに対してデュロキセチン（SNRI）は比較的エビデンスのある薬剤で、ASCO等のガイドラインでも推奨されています。ビタミンB12やガバペンチンはよく使われますが、高いエビデンスには乏しいとされています。治療よりも予防が困難な領域です。"
+  },
+
+  // ---- 副作用管理（応用） ----
+  {
+    id: 54, cat: "副作用管理",
+    q: "抗がん剤による口腔粘膜炎（口内炎）の予防に最もエビデンスがある方法はどれか（造血幹細胞移植における大量MEL療法）。",
+    choices: ["ポビドンヨードによるうがい", "クライオセラピー（口腔冷却療法）", "グルタミン内服", "塩化亜鉛うがい"],
+    ans: 1,
+    exp: "メルファラン大量療法では口腔冷却療法（クライオセラピー：氷を含むことで口腔粘膜の血流を低下させ薬剤の到達を減少させる）が口腔粘膜炎予防に最もエビデンスがあります。フッ化ウラシルなど短時間投与の薬剤でも有効です。"
+  },
+  {
+    id: 55, cat: "副作用管理",
+    q: "チロシンキナーゼ阻害薬（TKI）による高血圧管理として正しいのはどれか。",
+    choices: [
+      "降圧薬が必要になったらTKIを永久中止する",
+      "ACE阻害薬・ARB・Ca拮抗薬（アムロジピン等）で降圧管理しながらTKIを継続する",
+      "利尿薬のみで管理し他の降圧薬は使用しない",
+      "高血圧はTKIの効果指標であるため治療しない"
+    ],
+    ans: 1,
+    exp: "ベバシズマブ・スニチニブ・ソラフェニブ等VEGF/VEGFR系を阻害するTKIは高頻度に高血圧を来します。多くの場合、降圧薬（ACE阻害薬・ARB・ジヒドロピリジン系Ca拮抗薬）で管理しながら投与継続が可能です。Grade3（>160/100mmHg）では休薬を検討します。なお、CYP3A4を阻害するジルチアゼムはTKIとの相互作用に注意が必要です。"
+  },
+  {
+    id: 56, cat: "副作用管理",
+    q: "アントラサイクリン系薬剤（ドキソルビシン）の累積投与量の目安として重要なのはどれか。",
+    choices: [
+      "累積量に関係なく心毒性リスクはない",
+      "ドキソルビシンで累積550mg/m²（心保護なし）を超えると心毒性リスクが急増する",
+      "毎回投与後にエコーで評価すれば累積量は無制限",
+      "累積量は腎機能で調整するため関係ない"
+    ],
+    ans: 1,
+    exp: "ドキソルビシンは累積投与量依存性の心毒性（拡張型心筋症）があります。デクスラゾキサン使用なしの場合、550mg/m²を超えると心不全リスクが急増します（リポソーム製剤・デクスラゾキサン使用で上限変動）。投与前にLVEF（左室駆出率）評価が必要です。"
+  },
+
+  // ---- レジメン・投与管理（応用） ----
+  {
+    id: 57, cat: "レジメン・投与管理",
+    q: "R-CHOP療法の構成薬剤として正しいのはどれか。",
+    choices: [
+      "リツキシマブ＋シクロホスファミド＋ドキソルビシン＋ビンクリスチン＋プレドニゾロン",
+      "リツキシマブ＋シスプラチン＋ドキソルビシン＋ビンブラスチン＋プレドニゾロン",
+      "リツキシマブ＋シクロホスファミド＋エトポシド＋ビンクリスチン＋デキサメタゾン",
+      "リツキシマブ＋カルボプラチン＋ドキソルビシン＋ビンクリスチン＋プレドニゾロン"
+    ],
+    ans: 0,
+    exp: "R-CHOP：Rituximab（リツキシマブ）＋Cyclophosphamide（シクロホスファミド）＋Hydroxydaunorubicin（ドキソルビシン）＋Oncovin（ビンクリスチン）＋Prednisolone（プレドニゾロン）。びまん性大細胞型B細胞リンパ腫（DLBCL）の標準一次治療です。"
+  },
+  {
+    id: 58, cat: "レジメン・投与管理",
+    q: "AC→パクリタキセル療法（逐次投与）における乳がん術後補助療法で、投与間隔を3週→2週（dose-dense）にする際に必須となる支持療法はどれか。",
+    choices: ["制吐薬の強化のみ", "G-CSF（顆粒球コロニー刺激因子）の投与", "デクスラゾキサンの投与", "エリスロポエチンの投与"],
+    ans: 1,
+    exp: "dose-dense化学療法（投与間隔の短縮）では骨髄回復期間も短くなるため、好中球減少が深刻になります。G-CSFの予防投与により次コースまでに好中球が十分回復し、スケジュールが維持可能となります。dose-dense AC→Taxolは術後補助療法として生存率改善が示されています。"
+  },
+  {
+    id: 59, cat: "レジメン・投与管理",
+    q: "腎機能低下患者（CCr 30mL/min）へのカルボプラチン投与量算出に用いるCalvert式の正しい記述はどれか。",
+    choices: [
+      "投与量(mg) = AUC × 体重",
+      "投与量(mg) = AUC × (GFR + 25)",
+      "投与量(mg) = AUC × 体表面積",
+      "投与量(mg) = AUC × (CCr × 0.85)"
+    ],
+    ans: 1,
+    exp: "Calvert式：カルボプラチン投与量(mg) = 目標AUC × (GFR + 25)。GFRにはクレアチニンクリアランス（Cockcroft-Gault式など）を用います。腎機能に応じた用量調整が自動的に行われるため、過量投与（重篤な骨髄抑制）と過少投与を防ぎます。AUCは通常5〜6 mg/mL·minが用いられます。"
+  },
+
+  // ---- 薬物相互作用（応用） ----
+  {
+    id: 60, cat: "薬物相互作用",
+    q: "タモキシフェンの活性代謝物エンドキシフェン生成に関わる酵素と、その働きを阻害する薬剤の組み合わせで正しいのはどれか。",
+    choices: [
+      "CYP2D6 ─ パロキセチン（強力なCYP2D6阻害薬）",
+      "CYP3A4 ─ リファンピシン（CYP3A4誘導薬）",
+      "CYP2C9 ─ フルコナゾール（CYP2C9阻害薬）",
+      "UGT1A1 ─ アタザナビル（UGT1A1阻害薬）"
+    ],
+    ans: 0,
+    exp: "タモキシフェンはCYP2D6によりエンドキシフェン（活性代謝物）へ変換されます。パロキセチン・フルオキセチンなどのSSRIは強力なCYP2D6阻害薬であり、エンドキシフェン血中濃度を低下させ乳がん治療効果を減弱させる可能性があります。乳がん患者の抗うつ薬選択では注意が必要です。"
+  },
+  {
+    id: 61, cat: "薬物相互作用",
+    q: "ALK融合遺伝子陽性肺がんの治療薬アレクチニブ（アレセンサ）はどのCYP酵素で主に代謝されるか。",
+    choices: ["CYP1A2", "CYP2D6", "CYP3A4", "CYP2C19"],
+    ans: 2,
+    exp: "アレクチニブはCYP3A4で主に代謝されます。CYP3A4強力阻害薬（アゾール系抗真菌薬、グレープフルーツ等）で血中濃度上昇、CYP3A4誘導薬（リファンピシン、フェニトイン、カルバマゼピン等）で血中濃度低下が起こるため、これらとの併用には注意が必要です。"
+  },
+
+  // ---- 薬学的知識（総合） ----
+  {
+    id: 62, cat: "薬物相互作用",
+    q: "アゾシチジン（アザシチジン）の作用機序として正しいのはどれか。",
+    choices: ["DNA脱メチル化作用（低メチル化）による腫瘍抑制遺伝子の再発現", "トポイソメラーゼⅠ阻害", "BCL-2阻害によるアポトーシス誘導", "HDAC阻害によるクロマチン構造変化"],
+    ans: 0,
+    exp: "アザシチジン（ビダーザ）はDNAメチルトランスフェラーゼ（DNMT）阻害薬（低メチル化薬）です。がん抑制遺伝子プロモーター領域の異常なメチル化を解除し、遺伝子発現を回復させます。骨髄異形成症候群（MDS）の治療に使用されます。"
+  },
+  {
+    id: 63, cat: "副作用管理",
+    q: "VEGF/VEGFR阻害薬（ベバシズマブ、スニチニブ等）の重篤な副作用として、特に術後や侵襲的処置前後に問題となるのはどれか。",
+    choices: ["骨髄抑制", "創傷治癒遅延・消化管穿孔・瘻孔形成", "末梢神経障害", "間質性肺炎"],
+    ans: 1,
+    exp: "VEGF/VEGFR阻害薬は血管新生・組織修復に必要なVEGFシグナルを抑制するため、創傷治癒が著しく遅延します。手術前後（少なくとも術前4〜6週間、術後4週間程度）の休薬が推奨されます。消化管穿孔（腸管への腫瘍浸潤部位等）も重篤な合併症です。"
+  },
+  {
+    id: 64, cat: "分子標的薬",
+    q: "PARP阻害薬（オラパリブ等）が有効性を示す腫瘍の特徴として正しいのはどれか。",
+    choices: [
+      "MSI-High（マイクロサテライト不安定性高値）",
+      "BRCA1/2変異（相同組換え修復欠損）",
+      "PD-L1高発現",
+      "HER2過剰発現"
+    ],
+    ans: 1,
+    exp: "PARP阻害薬はDNA一本鎖切断修復（BER経路）を阻害します。BRCA1/2変異腫瘍では相同組換え修復（HRR）も欠損しているため、合成致死性（synthetic lethality）の概念により選択的に腫瘍細胞が死滅します。卵巣がん・乳がん・前立腺がん・膵がんに適応があります。"
+  },
+  {
+    id: 65, cat: "レジメン・投与管理",
+    q: "シスプラチン投与に際して適切な補液管理として正しいのはどれか。",
+    choices: [
+      "投与前後で500mL程度の補液を行えばよい",
+      "十分な水和（投与前・中・後で総量2〜3L以上）と尿量100mL/h以上の確保を行う",
+      "腎毒性予防のために水分を制限して投与する",
+      "利尿薬を先に投与してから補液は行わない"
+    ],
+    ans: 1,
+    exp: "シスプラチンの腎毒性は尿細管への直接障害です。十分な水和（投与前輸液500〜1000mL、投与後も含め計2〜3L以上）により尿量を確保（100mL/h以上）し、腎尿細管での薬剤曝露を最小化します。マンニトール（浸透圧利尿）を用いる施設もあります。"
+  },
+
+  // ---- 複数選択問題（実践レベル） ----
+  {
+    id: 66, cat: "支持療法",
+    q: "発熱性好中球減少症（FN）の初期治療として緑膿菌をカバーする抗菌薬として推奨されるものを3つ選べ。",
+    choices: ["セフェピム", "タゾバクタム・ピペラシリン", "イミペネム・シラスタチン", "セフトリアキソン", "ゲンタマイシン"],
+    ans: [0, 1, 2],
+    exp: "FNの初期抗菌薬は緑膿菌を含むグラム陰性桿菌をカバーする広域抗菌薬が必要です。セフェピム・タゾバクタム/ピペラシリン・カルバペネム系（イミペネム、メロペネム）が単剤での標準的選択肢です。セフトリアキソンは緑膿菌への抗菌活性が不十分で、ゲンタマイシン単剤も推奨されません。"
+  },
+  {
+    id: 67, cat: "分子標的薬",
+    q: "ALK融合遺伝子陽性非小細胞肺がんに承認されているALK-TKIを3つ選べ。",
+    choices: ["クリゾチニブ", "アレクチニブ", "ロルラチニブ", "オシメルチニブ", "ダコミチニブ"],
+    ans: [0, 1, 2],
+    exp: "ALK-TKIとして承認されているのはクリゾチニブ（第1世代）、アレクチニブ・セリチニブ・ブリガチニブ（第2世代）、ロルラチニブ（第3世代）です。オシメルチニブはEGFR-TKI（第3世代）、ダコミチニブはEGFR-TKI（第2世代）であり、ALKには無効です。"
+  },
+  {
+    id: 68, cat: "分子標的薬",
+    q: "オラパリブ（リムパーザ）のBRCA変異の有無にかかわらず承認されている適応を2つ選べ。",
+    choices: [
+      "プラチナ感受性再発卵巣癌の維持療法（初回化学療法後）",
+      "がん化学療法歴のあるHER2陰性の手術不能・再発乳癌",
+      "遠隔転移を有する去勢抵抗性前立腺癌",
+      "プラチナ製剤を含む化学療法後の治癒切除不能な膵臓癌の維持療法",
+      "進展型小細胞肺癌の維持療法"
+    ],
+    ans: [0, 2],
+    exp: "オラパリブのBRCA変異非依存の適応：①プラチナ感受性再発卵巣癌（HRR変異陽性）の初回化学療法後維持療法、②mCRPCのBRCA変異関連（実際はBRCA変異要件あり）。乳癌・膵癌適応はBRCA生殖細胞系列変異が必要です。各適応の詳細な要件は添付文書・ガイドラインで確認が必要です。"
+  },
+  {
+    id: 69, cat: "免疫チェックポイント阻害薬",
+    q: "ペムブロリズマブ（キイトルーダ）が腫瘍種を問わず（tumor-agnostic）承認されているバイオマーカーを2つ選べ。",
+    choices: [
+      "PD-L1 TPS≧50%",
+      "MSI-High（高頻度マイクロサテライト不安定性）",
+      "TMB-High（腫瘍遺伝子変異量高値）",
+      "HER2過剰発現",
+      "BRCA1/2変異"
+    ],
+    ans: [1, 2],
+    exp: "ペムブロリズマブはMSI-High固形腫瘍（組織横断的）およびTMB-High固形腫瘍（TMB≧10 mut/Mb）に対して、腫瘍種を問わない（tumor-agnostic）適応が承認されています。PD-L1は特定の腫瘍種で必要なバイオマーカーですが、腫瘍横断的ではありません。"
+  },
+  {
+    id: 70, cat: "副作用管理",
+    q: "Grade 3以上のirAE（免疫関連有害事象）が発現した場合の対応として正しいものを2つ選べ。",
+    choices: [
+      "投与量を半量に減量して継続する",
+      "免疫チェックポイント阻害薬を休薬または永久中止する",
+      "プレドニゾロン換算1〜2mg/kg/日以上のステロイド全身投与を開始する",
+      "NSAIDsのみで経過観察する",
+      "次のコースから予防的ステロイドを投与して継続する"
+    ],
+    ans: [1, 2],
+    exp: "Grade 3以上のirAEでは原則として免疫チェックポイント阻害薬を休薬し（Grade 4や一部のGrade 3は永久中止）、プレドニゾロン換算1〜2mg/kg/日のステロイド全身投与を開始します。減量継続・NSAIDsのみ・予防ステロイドで継続は不適切です。ステロイド抵抗性の場合はインフリキシマブ等を追加します。"
+  },
+  {
+    id: 71, cat: "レジメン・投与管理",
+    q: "プラチナ製剤として分類される薬剤を2つ選べ。",
+    choices: ["オキサリプラチン", "イリノテカン", "カルボプラチン", "ゲムシタビン", "パクリタキセル"],
+    ans: [0, 2],
+    exp: "プラチナ製剤はシスプラチン・カルボプラチン・オキサリプラチン・ネダプラチンなどです。DNAに結合して鎖間架橋を形成しアポトーシスを誘導します。イリノテカンはトポイソメラーゼI阻害薬、ゲムシタビンはピリミジン系代謝拮抗薬、パクリタキセルはタキサン系です。"
+  },
+  {
+    id: 72, cat: "薬物相互作用",
+    q: "CYP3A4を強力に誘導し、多くの分子標的薬の血中濃度を低下させる薬剤を3つ選べ。",
+    choices: ["リファンピシン", "フェニトイン", "カルバマゼピン", "クラリスロマイシン", "フルコナゾール"],
+    ans: [0, 1, 2],
+    exp: "CYP3A4強力誘導薬：リファンピシン（抗結核薬）・フェニトイン・カルバマゼピン（抗てんかん薬）・セントジョーンズワートなど。これらは多くの分子標的薬（イマチニブ、ソラフェニブ、エルロチニブ等）の代謝を促進し血中濃度を低下させます。クラリスロマイシン・フルコナゾールはCYP3A4阻害薬です。"
+  },
+  {
+    id: 73, cat: "殺細胞性抗腫瘍薬",
+    q: "アントラサイクリン系薬剤に分類されるものを2つ選べ。",
+    choices: ["ドキソルビシン", "ビンクリスチン", "エピルビシン", "パクリタキセル", "ゲムシタビン"],
+    ans: [0, 2],
+    exp: "アントラサイクリン系：ドキソルビシン（アドリアマイシン）・エピルビシン・ダウノルビシン・イダルビシン・アムルビシンなど。トポイソメラーゼII阻害・DNAインターカレーション・フリーラジカル産生による細胞障害作用を持ちます。累積投与量依存性の心毒性が共通の特徴です。"
+  },
+  {
+    id: 74, cat: "支持療法",
+    q: "がん患者における静脈血栓塞栓症（VTE）の予防・治療として現在推奨される抗凝固療法を2つ選べ。",
+    choices: [
+      "ワルファリン（INR 2〜3管理）",
+      "低分子ヘパリン（LMWH）",
+      "直接経口抗凝固薬（DOAC：アピキサバン・リバーロキサバン等）",
+      "アスピリン単独",
+      "未分画ヘパリン長期皮下注"
+    ],
+    ans: [1, 2],
+    exp: "がん関連VTEの抗凝固療法はLMWH（ダルテパリン・エノキサパリン等）またはDOAC（アピキサバン・リバーロキサバン・エドキサバン）が推奨されます（ASCO/NCCN等）。ワルファリンはINR変動が大きく管理困難なため、がん患者では推奨度が低下しています。"
+  },
+  {
+    id: 75, cat: "分子標的薬",
+    q: "抗体薬物複合体（ADC）に分類される薬剤を2つ選べ。",
+    choices: [
+      "トラスツズマブ デルクステカン（T-DXd）",
+      "ペルツズマブ",
+      "エンホルツマブ ベドチン",
+      "ラムシルマブ",
+      "セツキシマブ"
+    ],
+    ans: [0, 2],
+    exp: "ADC（Antibody-Drug Conjugate）は抗体とリンカーで細胞毒性薬を連結した分子です。T-DXd（トポイソメラーゼI阻害薬DXdをトラスツズマブに連結）・エンホルツマブ ベドチン（Nectin-4標的、微小管阻害薬MMAE連結）などがあります。ペルツズマブ・ラムシルマブ・セツキシマブは通常の抗体薬です。"
+  }
+];
+
+const CATEGORIES = [...new Set(QUESTIONS.map(q => q.cat))];
+
+// ===================== 状態管理 =====================
+let state = {
+  mode: null,
+  session: [],
+  current: 0,
+  score: 0,
+  mockTotal: 0,
+  mockTimeSec: 0,
+  mockTimerInterval: null,
+  selectedCats: [...CATEGORIES],
+  qCount: 10,
+  qOrder: 'random',
+  selectedChoices: [],    // 複数選択用
+  mockSelectedChoices: [] // 模擬試験用
+};
+
+// ===================== LocalStorage =====================
+// ---- インメモリストレージ（localStorageが使えない環境でも動作） ----
+let _history = [];
+let _wrong = {};
+(function initStorage() {
+  try {
+    const h = localStorage.getItem('ganQuizHistory');
+    const w = localStorage.getItem('ganQuizWrong');
+    if (h) _history = JSON.parse(h);
+    if (w) _wrong = JSON.parse(w);
+  } catch(e) {}
+})();
+
+function loadHistory() { return _history; }
+function saveHistory(entry) {
+  _history.unshift(entry);
+  if (_history.length > 50) _history.pop();
+  try { localStorage.setItem('ganQuizHistory', JSON.stringify(_history)); } catch(e) {}
+}
+function loadWrong() { return _wrong; }
+function saveWrong(ids) {
+  ids.forEach(id => { _wrong[id] = (_wrong[id] || 0) + 1; });
+  try { localStorage.setItem('ganQuizWrong', JSON.stringify(_wrong)); } catch(e) {}
+}
+function clearHistory() {
+  if (!confirm('全ての履歴と苦手問題データをリセットしますか？')) return;
+  _history = [];
+  _wrong = {};
+  try { localStorage.removeItem('ganQuizHistory'); localStorage.removeItem('ganQuizWrong'); } catch(e) {}
+  renderHistory();
+  renderHomeStats();
+}
+
+// ===================== Tab navigation =====================
+function showTab(tab) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + tab).classList.add('active');
+  const tabs = ['home','quiz','mock','history'];
+  const navIdx = tabs.indexOf(tab);
+  if (navIdx >= 0) document.querySelectorAll('nav button')[navIdx]?.classList.add('active');
+  if (tab === 'home') renderHomeStats();
+  if (tab === 'quiz') renderCatSelect();
+  if (tab === 'history') renderHistory();
+  if (tab === 'mock') { document.getElementById('mock-setup').style.display='block'; document.getElementById('mock-area').style.display='none'; }
+}
+
+// ===================== Home =====================
+function renderHomeStats() {
+  const hist = loadHistory();
+  const wrong = loadWrong();
+  const totalSessions = hist.length;
+  const totalQ = hist.reduce((a,h) => a + h.total, 0);
+  const totalCorrect = hist.reduce((a,h) => a + h.score, 0);
+  const acc = totalQ > 0 ? Math.round(totalCorrect / totalQ * 100) : 0;
+  const wrongCount = Object.keys(wrong).length;
+
+  document.getElementById('home-stats').innerHTML = `
+    <div class="stat-box"><div class="num">${totalSessions}</div><div class="label">受験回数</div></div>
+    <div class="stat-box"><div class="num">${totalQ}</div><div class="label">解答問題数</div></div>
+    <div class="stat-box"><div class="num">${acc}%</div><div class="label">総合正答率</div></div>
+    <div class="stat-box"><div class="num">${wrongCount}</div><div class="label">苦手問題数</div></div>
+  `;
+
+  // Category accuracy
+  const tbody = document.getElementById('home-cat-body');
+  tbody.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const catHist = hist.flatMap(h => h.details || []).filter(d => d.cat === cat);
+    const catTotal = catHist.length;
+    const catCorrect = catHist.filter(d => d.correct).length;
+    const catAcc = catTotal > 0 ? Math.round(catCorrect / catTotal * 100) : null;
+    tbody.innerHTML += `<tr>
+      <td>${cat}</td>
+      <td>${catTotal}</td>
+      <td>${catAcc !== null ? `<span class="acc-bar-wrap"><span class="acc-bar" style="width:${catAcc}%"></span></span> ${catAcc}%` : '未受験'}</td>
+    </tr>`;
+  });
+}
+
+function startMode(mode) {
+  if (mode === 'random') {
+    state.selectedCats = [...CATEGORIES];
+    state.qCount = 10;
+    state.qOrder = 'random';
+    startQuiz();
+    showTab('quiz');
+  } else if (mode === 'wrong') {
+    const wrong = loadWrong();
+    const wrongIds = Object.keys(wrong).map(Number);
+    if (wrongIds.length === 0) { alert('苦手問題がありません。まず問題を解いてください。'); return; }
+    const qs = QUESTIONS.filter(q => wrongIds.includes(q.id));
+    beginSession(qs, 'practice');
+    showTab('quiz');
+  }
+}
+
+// ===================== Quiz setup =====================
+function renderCatSelect() {
+  const grid = document.getElementById('cat-select-grid');
+  grid.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn' + (state.selectedCats.includes(cat) ? ' selected' : '');
+    btn.textContent = cat;
+    btn.onclick = () => {
+      if (state.selectedCats.includes(cat)) {
+        if (state.selectedCats.length === 1) return;
+        state.selectedCats = state.selectedCats.filter(c => c !== cat);
+      } else {
+        state.selectedCats.push(cat);
+      }
+      btn.classList.toggle('selected', state.selectedCats.includes(cat));
+    };
+    grid.appendChild(btn);
+  });
+}
+
+function startQuiz() {
+  const countInput = document.getElementById('q-count');
+  state.qCount = Math.min(Math.max(parseInt(countInput?.value) || 10, 1), QUESTIONS.length);
+  state.qOrder = document.getElementById('q-order')?.value || 'random';
+
+  let pool = QUESTIONS.filter(q => state.selectedCats.includes(q.cat));
+  if (pool.length === 0) { alert('選択されたカテゴリに問題がありません。'); return; }
+  if (state.qOrder === 'random') pool = shuffle(pool);
+  pool = pool.slice(0, state.qCount);
+
+  beginSession(pool, 'practice');
+  document.getElementById('quiz-setup').style.display = 'none';
+  document.getElementById('quiz-area').style.display = 'block';
+}
+
+function beginSession(pool, mode) {
+  state.mode = mode;
+  state.session = pool.map(q => ({ q, answered: false, correct: false, userAns: null }));
+  state.current = 0;
+  state.score = 0;
+  renderQuestion();
+}
+
+// ===================== Quiz render =====================
+function renderQuestion() {
+  const item = state.session[state.current];
+  const q = item.q;
+  const total = state.session.length;
+  const pct = Math.round((state.current / total) * 100);
+  const isMulti = Array.isArray(q.ans);
+
+  state.selectedChoices = [];
+
+  document.getElementById('q-progress-text').textContent = `${state.current + 1} / ${total}`;
+  document.getElementById('q-progress-fill').style.width = pct + '%';
+  document.getElementById('q-score-badge').textContent = `正解: ${state.score}`;
+  document.getElementById('q-cat-tag').textContent = q.cat;
+  document.getElementById('q-text').textContent = q.q;
+
+  const choicesEl = document.getElementById('q-choices');
+  choicesEl.innerHTML = '';
+  if (isMulti) {
+    const hint = document.createElement('div');
+    hint.className = 'multi-hint';
+    hint.textContent = `☑ ${q.ans.length}つ選んで「解答する」を押してください`;
+    choicesEl.appendChild(hint);
+  }
+  const labels = ['①', '②', '③', '④', '⑤', '⑥'];
+  q.choices.forEach((ch, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="choice-num">${labels[i]}</span><span>${ch}</span>`;
+    btn.onclick = isMulti ? () => toggleMultiChoice(i) : () => selectAnswer(i);
+    choicesEl.appendChild(btn);
+  });
+
+  document.getElementById('q-explanation').classList.remove('show');
+  document.getElementById('q-result-banner').style.display = 'none';
+  document.getElementById('btn-explain').style.display = 'none';
+  document.getElementById('btn-next').style.display = 'none';
+  document.getElementById('btn-submit-multi').style.display = 'none';
+}
+
+function toggleMultiChoice(idx) {
+  if (state.session[state.current].answered) return;
+  const q = state.session[state.current].q;
+  const pos = state.selectedChoices.indexOf(idx);
+  if (pos === -1) state.selectedChoices.push(idx);
+  else state.selectedChoices.splice(pos, 1);
+
+  const btns = document.querySelectorAll('#q-choices .choice-btn');
+  // +1 for the hint div offset
+  Array.from(document.querySelectorAll('#q-choices .choice-btn')).forEach((btn, i) => {
+    btn.classList.toggle('multi-selected', state.selectedChoices.includes(i));
+  });
+
+  const submitBtn = document.getElementById('btn-submit-multi');
+  if (state.selectedChoices.length > 0) {
+    submitBtn.style.display = 'inline-block';
+    submitBtn.textContent = `解答する（${state.selectedChoices.length}/${q.ans.length}つ選択中）`;
+  } else {
+    submitBtn.style.display = 'none';
+  }
+}
+
+function submitMultiAnswer() {
+  const item = state.session[state.current];
+  if (item.answered) return;
+  item.answered = true;
+  const selected = [...state.selectedChoices].sort((a,b) => a-b);
+  const correct = [...item.q.ans].sort((a,b) => a-b);
+  item.userAns = selected;
+  item.correct = JSON.stringify(selected) === JSON.stringify(correct);
+  if (item.correct) state.score++;
+
+  document.querySelectorAll('#q-choices .choice-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    btn.classList.remove('multi-selected');
+    if (item.q.ans.includes(i)) {
+      btn.classList.add('correct');
+      btn.innerHTML += '<span class="choice-icon">✅</span>';
+    } else if (state.selectedChoices.includes(i)) {
+      btn.classList.add('wrong');
+      btn.innerHTML += '<span class="choice-icon">❌</span>';
+    }
+  });
+
+  document.getElementById('btn-submit-multi').style.display = 'none';
+  document.getElementById('q-explanation-text').innerHTML = item.q.exp;
+  document.getElementById('btn-explain').style.display = 'inline-block';
+  const isLast = state.current === state.session.length - 1;
+  if (isLast) showInlineResult();
+  else document.getElementById('btn-next').style.display = 'inline-block';
+}
+
+function selectAnswer(idx) {
+  const item = state.session[state.current];
+  if (item.answered) return;
+  item.answered = true;
+  item.userAns = idx;
+  item.correct = idx === item.q.ans;
+  if (item.correct) state.score++;
+
+  document.querySelectorAll('#q-choices .choice-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === item.q.ans) {
+      btn.classList.add('correct');
+      btn.innerHTML += '<span class="choice-icon">✅</span>';
+    } else if (i === idx && !item.correct) {
+      btn.classList.add('wrong');
+      btn.innerHTML += '<span class="choice-icon">❌</span>';
+    }
+  });
+
+  document.getElementById('q-explanation-text').innerHTML = item.q.exp;
+  document.getElementById('btn-explain').style.display = 'inline-block';
+  const isLast = state.current === state.session.length - 1;
+  if (isLast) showInlineResult();
+  else document.getElementById('btn-next').style.display = 'inline-block';
+}
+
+function showInlineResult() {
+  const total = state.session.length;
+  const score = state.session.filter(i => i.correct).length;
+  const pct = Math.round(score / total * 100);
+  const msg = pct >= 80 ? '素晴らしい結果です！' : pct >= 60 ? 'もう少しで合格圏です。' : '復習してもう一度挑戦しましょう。';
+  document.getElementById('q-result-score').textContent = `正答率は ${score}/${total} でした。お疲れさまでした。`;
+  document.getElementById('q-result-msg').textContent = msg;
+  document.getElementById('q-result-banner').style.display = 'block';
+  const details = state.session.map(i => ({ cat: i.q.cat, correct: i.correct, id: i.q.id }));
+  const wrongIds = state.session.filter(i => !i.correct).map(i => i.q.id);
+  try { saveHistory({ date: new Date().toISOString(), score, total, pct, mode: state.mode, details }); } catch(e) {}
+  try { saveWrong(wrongIds); } catch(e) {}
+}
+
+function toggleExplanation() {
+  const el = document.getElementById('q-explanation');
+  el.classList.toggle('show');
+  document.getElementById('btn-explain').textContent = el.classList.contains('show') ? '解説を閉じる' : '解説を見る';
+}
+
+function nextQuestion() {
+  state.current++;
+  renderQuestion();
+}
+
+// ===================== Mock exam =====================
+function startMock() {
+  const countSel = document.getElementById('mock-count');
+  const timeSel = document.getElementById('mock-time');
+  const count = parseInt(countSel.value);
+  const minPerQ = parseInt(timeSel.value);
+
+  let pool = shuffle([...QUESTIONS]).slice(0, count);
+  state.mockTotal = count;
+  state.mockTimeSec = count * minPerQ * 60;
+
+  beginMockSession(pool);
+  document.getElementById('mock-setup').style.display = 'none';
+  document.getElementById('mock-area').style.display = 'block';
+
+  startMockTimer();
+}
+
+let mockSession = [];
+let mockCurrent = 0;
+let mockScore = 0;
+
+function beginMockSession(pool) {
+  mockSession = pool.map(q => ({ q, answered: false, correct: false, userAns: null }));
+  mockCurrent = 0;
+  mockScore = 0;
+  renderMockQuestion();
+}
+
+function renderMockQuestion() {
+  const item = mockSession[mockCurrent];
+  const q = item.q;
+  const total = mockSession.length;
+  const pct = Math.round((mockCurrent / total) * 100);
+  const isMulti = Array.isArray(q.ans);
+
+  state.mockSelectedChoices = [];
+
+  document.getElementById('mock-progress-text').textContent = `${mockCurrent + 1} / ${total}`;
+  document.getElementById('mock-progress-fill').style.width = pct + '%';
+  document.getElementById('mock-cat-tag').textContent = q.cat;
+  document.getElementById('mock-q-text').textContent = q.q;
+
+  const choicesEl = document.getElementById('mock-choices');
+  choicesEl.innerHTML = '';
+  if (isMulti) {
+    const hint = document.createElement('div');
+    hint.className = 'multi-hint';
+    hint.textContent = `☑ ${q.ans.length}つ選んで「解答する」を押してください`;
+    choicesEl.appendChild(hint);
+  }
+  const labels = ['①', '②', '③', '④', '⑤', '⑥'];
+  q.choices.forEach((ch, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span class="choice-num">${labels[i]}</span><span>${ch}</span>`;
+    btn.onclick = isMulti ? () => toggleMockMultiChoice(i) : () => selectMockAnswer(i);
+    choicesEl.appendChild(btn);
+  });
+
+  document.getElementById('mock-btn-next').style.display = 'none';
+  document.getElementById('mock-btn-submit-multi').style.display = 'none';
+  document.getElementById('mock-result-banner').style.display = 'none';
+}
+
+function toggleMockMultiChoice(idx) {
+  if (mockSession[mockCurrent].answered) return;
+  const q = mockSession[mockCurrent].q;
+  const pos = state.mockSelectedChoices.indexOf(idx);
+  if (pos === -1) state.mockSelectedChoices.push(idx);
+  else state.mockSelectedChoices.splice(pos, 1);
+
+  document.querySelectorAll('#mock-choices .choice-btn').forEach((btn, i) => {
+    btn.classList.toggle('multi-selected', state.mockSelectedChoices.includes(i));
+  });
+
+  const submitBtn = document.getElementById('mock-btn-submit-multi');
+  if (state.mockSelectedChoices.length > 0) {
+    submitBtn.style.display = 'inline-block';
+    submitBtn.textContent = `解答する（${state.mockSelectedChoices.length}/${q.ans.length}つ選択中）`;
+  } else {
+    submitBtn.style.display = 'none';
+  }
+}
+
+function submitMockMultiAnswer() {
+  const item = mockSession[mockCurrent];
+  if (item.answered) return;
+  item.answered = true;
+  const selected = [...state.mockSelectedChoices].sort((a,b) => a-b);
+  const correct = [...item.q.ans].sort((a,b) => a-b);
+  item.userAns = selected;
+  item.correct = JSON.stringify(selected) === JSON.stringify(correct);
+  if (item.correct) mockScore++;
+
+  document.querySelectorAll('#mock-choices .choice-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    btn.classList.remove('multi-selected');
+    if (item.q.ans.includes(i)) {
+      btn.classList.add('correct');
+      btn.innerHTML += '<span class="choice-icon">✅</span>';
+    } else if (state.mockSelectedChoices.includes(i)) {
+      btn.classList.add('wrong');
+      btn.innerHTML += '<span class="choice-icon">❌</span>';
+    }
+  });
+
+  document.getElementById('mock-btn-submit-multi').style.display = 'none';
+  const isLast = mockCurrent === mockSession.length - 1;
+  if (isLast) showMockInlineResult();
+  else document.getElementById('mock-btn-next').style.display = 'inline-block';
+}
+
+function selectMockAnswer(idx) {
+  const item = mockSession[mockCurrent];
+  if (item.answered) return;
+  item.answered = true;
+  item.userAns = idx;
+  item.correct = idx === item.q.ans;
+  if (item.correct) mockScore++;
+
+  document.querySelectorAll('#mock-choices .choice-btn').forEach((btn, i) => {
+    btn.disabled = true;
+    if (i === item.q.ans) {
+      btn.classList.add('correct');
+      btn.innerHTML += '<span class="choice-icon">✅</span>';
+    } else if (i === idx && !item.correct) {
+      btn.classList.add('wrong');
+      btn.innerHTML += '<span class="choice-icon">❌</span>';
+    }
+  });
+
+  const isLast = mockCurrent === mockSession.length - 1;
+  if (isLast) {
+    showMockInlineResult();
+  } else {
+    document.getElementById('mock-btn-next').style.display = 'inline-block';
+  }
+}
+
+function showMockInlineResult() {
+  clearInterval(state.mockTimerInterval);
+  const total = mockSession.length;
+  const score = mockSession.filter(i => i.correct).length;
+  const pct = Math.round(score / total * 100);
+  const msg = pct >= 80 ? '素晴らしい結果です！' : pct >= 60 ? 'もう少しで合格圏です。' : '復習してもう一度挑戦しましょう。';
+  document.getElementById('mock-result-score').textContent = `正答率は ${score}/${total} でした。お疲れさまでした。`;
+  document.getElementById('mock-result-msg').textContent = msg;
+  document.getElementById('mock-result-banner').style.display = 'block';
+  const details = mockSession.map(i => ({ cat: i.q.cat, correct: i.correct, id: i.q.id }));
+  const wrongIds = mockSession.filter(i => !i.correct).map(i => i.q.id);
+  try { saveHistory({ date: new Date().toISOString(), score, total, pct, mode: 'mock', details }); } catch(e) {}
+  try { saveWrong(wrongIds); } catch(e) {}
+}
+
+function mockNext() {
+  mockCurrent++;
+  renderMockQuestion();
+}
+
+function startMockTimer() {
+  clearInterval(state.mockTimerInterval);
+  let remaining = state.mockTimeSec;
+  const timerEl = document.getElementById('mock-timer');
+  state.mockTimerInterval = setInterval(() => {
+    remaining--;
+    const m = Math.floor(remaining / 60).toString().padStart(2,'0');
+    const s = (remaining % 60).toString().padStart(2,'0');
+    timerEl.textContent = `${m}:${s}`;
+    timerEl.className = 'timer';
+    if (remaining <= 60) timerEl.classList.add('warning');
+    if (remaining <= 10) timerEl.classList.add('danger');
+    if (remaining <= 0) {
+      clearInterval(state.mockTimerInterval);
+      showMockInlineResult();
+    }
+  }, 1000);
+}
+
+function returnHome() {
+  document.getElementById('quiz-setup').style.display = 'block';
+  document.getElementById('quiz-area').style.display = 'none';
+  document.getElementById('q-result-banner').style.display = 'none';
+  document.getElementById('mock-setup').style.display = 'block';
+  document.getElementById('mock-area').style.display = 'none';
+  document.getElementById('mock-result-banner').style.display = 'none';
+  showTab('home');
+}
+
+// ===================== History =====================
+function renderHistory() {
+  const hist = loadHistory();
+  const el = document.getElementById('history-list');
+  if (hist.length === 0) { el.innerHTML = '<p class="text-muted text-center">まだ履歴がありません。</p>'; return; }
+
+  el.innerHTML = hist.map(h => {
+    const date = new Date(h.date);
+    const dateStr = `${date.getFullYear()}/${String(date.getMonth()+1).padStart(2,'0')}/${String(date.getDate()).padStart(2,'0')} ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
+    const badge = h.pct >= 80 ? 'badge-pass' : h.pct >= 60 ? 'badge-mid' : 'badge-fail';
+    const label = h.pct >= 80 ? '合格圏' : h.pct >= 60 ? '要努力' : '要復習';
+    const modeLabel = h.mode === 'mock' ? '模擬試験' : '練習';
+    return `<div class="history-item">
+      <div>
+        <div style="font-weight:bold;">${dateStr}</div>
+        <div class="text-muted">${modeLabel}・${h.total}問</div>
+      </div>
+      <div class="text-center">
+        <div class="history-score">${h.score} / ${h.total}</div>
+        <span class="badge ${badge}">${label}</span>
+      </div>
+      <div style="font-size:1.2rem; font-weight:bold; color:${h.pct>=80?'var(--success)':h.pct>=60?'var(--warning)':'var(--danger)'};">${h.pct}%</div>
+    </div>`;
+  }).join('');
+
+  // Stats
+  const totalQ = hist.reduce((a,h) => a + h.total, 0);
+  const totalC = hist.reduce((a,h) => a + h.score, 0);
+  const acc = totalQ > 0 ? Math.round(totalC/totalQ*100) : 0;
+  const best = hist.length > 0 ? Math.max(...hist.map(h=>h.pct)) : 0;
+  document.getElementById('history-stats').innerHTML = `
+    <div class="stat-box"><div class="num">${hist.length}</div><div class="label">総受験回数</div></div>
+    <div class="stat-box"><div class="num">${totalQ}</div><div class="label">総解答数</div></div>
+    <div class="stat-box"><div class="num">${acc}%</div><div class="label">平均正答率</div></div>
+    <div class="stat-box"><div class="num">${best}%</div><div class="label">最高正答率</div></div>
+  `;
+}
+
+// ===================== Utility =====================
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// ===================== Init =====================
+renderHomeStats();
+renderCatSelect();
+</script>
+</body>
+</html>
